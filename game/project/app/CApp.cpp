@@ -74,18 +74,25 @@ bool CApplication::InternOnUpdate()
 
 	SetViewMatrix(ViewMatrix);
 
+
 	return true;
 }
+
+int step = 0;
 
 bool CApplication::InternOnFrame()
 {
 	float WorldMatrix[16];
 
-	GetTranslationMatrix(0.0f, 0.0f, 0.0f, WorldMatrix);
+	GetTranslationMatrix(0.5f, 2.0f, 1.0f, WorldMatrix);
+	GetScaleMatrix(2.0f, WorldMatrix);
+	GetRotationXMatrix(40, WorldMatrix);
+
 
 	SetWorldMatrix(WorldMatrix);
 
 	DrawMesh(m_pTriangleMesh);
+		
 
 	return true;
 }
