@@ -1,4 +1,5 @@
 #include "CApp.h"
+#include <windows.h>
 
 CApplication::CApplication()
 	:m_FieldOfViewY(60.0f),
@@ -9,6 +10,7 @@ CApplication::CApplication()
 CApplication::~CApplication()
 {
 }
+
 
 bool CApplication::InternOnCreateMeshes()
 {
@@ -78,21 +80,31 @@ bool CApplication::InternOnUpdate()
 	return true;
 }
 
-int step = 0;
+float x = 0.0f;
+float step = 0.6f;
 
 bool CApplication::InternOnFrame()
 {
-	float WorldMatrix[16];
+	float WorldMatrix[16]; //Matrix
+	float TranslationMatrix[16];
+	float ScaleMatrix[16];
+	float RotationMatrix[16];
+	//float Vector[4];
 
-	GetTranslationMatrix(0.5f, 2.0f, 1.0f, WorldMatrix);
-	GetScaleMatrix(2.0f, WorldMatrix);
-	GetRotationXMatrix(40, WorldMatrix);
 
-
+	//1. Berechne Weltmatrix
+	GetTranslationMatrix(0, 0, -1.0f, TranslationMatrix);
+	//GetScaleMatrix(1,2,1, ScaleMatrix);
+	GetRotationZMatrix(x, RotationMatrix);
+	MulMatrix(TranslationMatrix, RotationMatrix, WorldMatrix);
+	
+	//2. Setze Weltmatrix
 	SetWorldMatrix(WorldMatrix);
-
+	//3. Zeichne Mesh
 	DrawMesh(m_pTriangleMesh);
-		
+
+	x += step;
+
 
 	return true;
 }
