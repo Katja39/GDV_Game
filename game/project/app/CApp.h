@@ -1,25 +1,31 @@
 #pragma once
 #include "yoshix_fix_function.h"
 
-#include <iostream>
-#include <math.h>
-
-using namespace gfx;
+#include "CGame.h"
+#include "KeyState.h"
 
 class CApplication : public gfx::IApplication
 {
 		public:
 			CApplication();
-			virtual ~CApplication();
+			~CApplication();
 
 		private:
-			float   m_FieldOfViewY;
-			BHandle m_pTriangleMesh;
+			float m_FieldOfViewY;
+
+			CGame* m_pGame;
+			KeyState m_KeyState;
+			gfx::BHandle m_pPlayerMesh;
+
+			gfx::BHandle m_pTriangleMesh;
 
 		private:
-			virtual bool InternOnCreateMeshes();
-			virtual bool InternOnReleaseMeshes();
-			virtual bool InternOnResize(int _Width, int _Height);
-			virtual bool InternOnUpdate();
-			virtual bool InternOnFrame();
+			 bool InternOnStartup();
+			 bool InternOnShutdown();
+			 bool InternOnCreateMeshes();
+			 bool InternOnReleaseMeshes();
+			 bool InternOnResize(int _Width, int _Height);
+			 bool InternOnKeyEvent();
+			 bool InternOnUpdate();
+			 bool InternOnFrame();
 };

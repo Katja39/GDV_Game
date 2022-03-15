@@ -1,14 +1,27 @@
 #include "CApp.h"
-#include <windows.h>
+#include "yoshix_fix_function.h"
+#include <iostream>
 
 CApplication::CApplication()
-	:m_FieldOfViewY(60.0f),
+	:m_pGame(nullptr),
+	m_FieldOfViewY(60.0f),
+	m_pPlayerMesh(nullptr),
 	m_pTriangleMesh(nullptr)
 {
 }
 
 CApplication::~CApplication()
 {
+	delete m_pGame;
+}
+
+bool InternOnStartup() 
+{
+	
+}
+bool InternOnShutdown() 
+{
+
 }
 
 
@@ -105,6 +118,10 @@ bool CApplication::InternOnFrame()
 
 	x += step;
 
+	if (x >= 360.0f)
+	{
+		x = 0;
+	}
 
 	return true;
 }
