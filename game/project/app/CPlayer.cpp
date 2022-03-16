@@ -6,7 +6,9 @@ CPlayer::CPlayer()
     ,PlayerIsAlive(true)
 {
     speed = 0.1;
-    m_Translation[1] = -3.5f;
+    m_Translation[0] = -5.0f;
+    m_Translation[1] = 0.0f;
+
 }
 
 CPlayer::~CPlayer()

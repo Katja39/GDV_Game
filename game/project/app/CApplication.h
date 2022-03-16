@@ -19,8 +19,6 @@ class CApplication : public gfx::IApplication
 			KeyState m_KeyState;
 			gfx::BHandle m_pPlayerMesh;
 
-			gfx::BHandle m_pTriangleMesh;
-
 		private:
 			 bool InternOnStartup();
 			 bool InternOnShutdown();
