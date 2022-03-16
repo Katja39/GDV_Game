@@ -3,21 +3,24 @@
 #include <iostream>
 
 CGame::CGame(gfx::BHandle* _ppPlayerMesh)
-	:_ppPlayerMesh(_ppPlayerMesh)
+	:m_State(EGameState::START)
+	,m_ppPlayerMesh(_ppPlayerMesh)
 {
+	m_State = EGameState::RUN;
+	InitGame();
 }
 
 CGame::~CGame()
 {
-	delete _pPlayer;
+	delete m_pPlayer;
 }
 
 void CGame::InitGame()
 {
-	_pPlayer = new CPlayer();
+	m_pPlayer = new CPlayer();
 }
 
 void CGame::RunGame(KeyState* _KeyState)
 {
-	_pPlayer->OnUpdate(_KeyState);
+	m_pPlayer->OnUpdate(_KeyState);
 }

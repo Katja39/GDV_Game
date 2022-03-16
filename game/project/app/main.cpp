@@ -1,6 +1,6 @@
 #include <iostream>
 #include "yoshix_fix_function.h"
-#include "CApp.h"
+#include "CApplication.h"
 
 int main() {
 

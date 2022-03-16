@@ -10,10 +10,12 @@ class CApplication : public gfx::IApplication
 			CApplication();
 			~CApplication();
 
+			CGame* m_pGame;
+
 		private:
 			float m_FieldOfViewY;
 
-			CGame* m_pGame;
+			
 			KeyState m_KeyState;
 			gfx::BHandle m_pPlayerMesh;
 
@@ -25,7 +27,7 @@ class CApplication : public gfx::IApplication
 			 bool InternOnCreateMeshes();
 			 bool InternOnReleaseMeshes();
 			 bool InternOnResize(int _Width, int _Height);
-			 bool InternOnKeyEvent();
+			 bool InternOnKeyEvent(unsigned int _Key, bool _IsKeyDown);
 			 bool InternOnUpdate();
 			 bool InternOnFrame();
 };
