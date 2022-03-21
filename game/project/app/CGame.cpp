@@ -1,6 +1,9 @@
 #include "CGame.h"
+#include "CVector.h"
 #include <cstdlib>
+#include <random>
 #include <iostream>
+
 
 CGame::CGame(gfx::BHandle* _ppPlayerMesh, gfx::BHandle* _ppEnemyMesh)
 	:m_State(EGameState::START)
@@ -42,6 +45,9 @@ void CGame::InitGame()
 void CGame::RunGame(KeyState* _KeyState)
 {
 	m_pPlayer->OnUpdate(_KeyState);
+	EnemyAction();
+
+	//IF Player dead, Gameover
 }
 
 void CGame::CreateEnemy() {
@@ -51,16 +57,22 @@ void CGame::CreateEnemy() {
 
 void CGame::EnemyAction() 
 {
-	for (CEnemy* e : m_pEnemies)
+	m_Ticks++;
+	if (m_Ticks == m_MaxTicks)
 	{
-		e->OnUpdate();
-	}
-		
-	CreateEnemy();
-		m_Speed++;
-		if (m_Speed >= m_MaxSpeedInterval)
+		for (CEnemy* e : m_pEnemies)
 		{
-			m_Speed = 0;
+			e->OnUpdate();
 		}
+			CreateEnemy();
+			m_Speed++;
+			if (m_Speed >= m_MaxSpeedInterval)
+			{
+				m_Speed = 0;
+				
+			}
+		
+		m_Ticks = 0;
 
+	}
 }

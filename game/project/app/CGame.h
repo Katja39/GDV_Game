@@ -25,6 +25,8 @@ private:
 
     int m_Speed = 0;
     int m_MaxSpeedInterval = 10;
+    int m_Ticks = 0;
+    int m_MaxTicks = 80;
     
 
 public:
