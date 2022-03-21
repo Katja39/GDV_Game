@@ -53,10 +53,17 @@ bool CApplication::InternOnResize(int _Width, int _Height)
 	return true;
 }
 
-bool CApplication::InternOnKeyEvent(unsigned int _Key, bool _IsKeyDown)
+bool CApplication::InternOnKeyEvent(unsigned int _Key, bool _IsKeyDown, bool _IsAltDown)
 {
-		if (_Key == 'W' || _Key == 38) m_KeyState.isWdown = _IsKeyDown; // 38 is the UP Arrow
-		if (_Key == 'S' || _Key == 40) m_KeyState.isSdown = _IsKeyDown; // 39 is the DOWN Arrow 
+		if (_Key == 'W' || _Key == 38){
+			m_KeyState.isWdown = _IsKeyDown; // 38 is the UP Arrow
+			std::cout << "Clicked W" << std::endl;
+		}
+		if (_Key == 'S' || _Key == 40){
+			m_KeyState.isSdown = _IsKeyDown; // 39 is the DOWN Arrow
+			std::cout << "Clicked S" << std::endl;
+		}
+		
 		return true;
 	
 }

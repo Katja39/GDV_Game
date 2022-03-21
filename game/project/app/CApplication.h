@@ -25,7 +25,7 @@ class CApplication : public gfx::IApplication
 			 bool InternOnCreateMeshes();
 			 bool InternOnReleaseMeshes();
 			 bool InternOnResize(int _Width, int _Height);
-			 bool InternOnKeyEvent(unsigned int _Key, bool _IsKeyDown);
+			 bool InternOnKeyEvent(unsigned int _Key, bool _IsKeyDown,bool _IsAltDown);
 			 bool InternOnUpdate();
 			 bool InternOnFrame();
 };
