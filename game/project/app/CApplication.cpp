@@ -4,9 +4,10 @@
 #include <cstdlib>
 
 CApplication::CApplication()
-	:m_pGame(nullptr),
-	m_FieldOfViewY(60.0f),
-	m_pPlayerMesh(nullptr)
+	:m_pGame(nullptr)
+	,m_FieldOfViewY(60.0f)
+	,m_pPlayerMesh(nullptr)
+	,m_pEnemyMesh(nullptr)
 {
 }
 
@@ -17,7 +18,7 @@ CApplication::~CApplication()
 
 bool CApplication::InternOnStartup()
 {
-	m_pGame = new CGame(&m_pPlayerMesh);
+	m_pGame = new CGame(&m_pPlayerMesh, &m_pEnemyMesh);
 	float ClearColor[4] = { 0.0f, 0.0f, 0.2f, 0.2f, };
 	gfx::SetClearColor(ClearColor);
 
@@ -32,12 +33,18 @@ bool CApplication::InternOnCreateMeshes()
 {
 	gfx::CreateMesh(m_pGame->m_pPlayer->getMeshInfo(), &m_pPlayerMesh);
 
+	for (CEnemy* e : m_pGame->m_pEnemies)
+	{
+		gfx::CreateMesh(e->getMeshInfo(), &m_pEnemyMesh);
+	}
+
 	return true;
 }
 
 bool CApplication::InternOnReleaseMeshes()
 {
 	gfx::ReleaseMesh(m_pPlayerMesh);
+	gfx::ReleaseMesh(m_pEnemyMesh);
 
 	return true;
 }
@@ -76,7 +83,7 @@ bool CApplication::InternOnUpdate()
 
 	float ViewMatrix[16];
 
-	m_pGame->RunGame(&m_KeyState);
+	m_pGame->RunGame(&m_KeyState); //TODO mehr States angeben
 
 
 	Eye[0] = 0.0f; At[0] = 0.0f; Up[0] = 0.0f;
@@ -100,6 +107,12 @@ bool CApplication::InternOnFrame()
 	gfx::GetTranslationMatrix(m_pGame->m_pPlayer->m_Translation[0], m_pGame->m_pPlayer->m_Translation[1], m_pGame->m_pPlayer->m_Translation[2], WorldMatrix);
 	gfx::SetWorldMatrix(WorldMatrix);
 	gfx::DrawMesh(m_pPlayerMesh);
+
+	 for (CEnemy* e : m_pGame->m_pEnemies) {
+        gfx::GetTranslationMatrix(e->m_Translation[0], e->m_Translation[1], e->m_Translation[2], WorldMatrix);
+        gfx::SetWorldMatrix(WorldMatrix);
+        gfx::DrawMesh(m_pEnemyMesh);
+    }
 
 	return true;
 }

@@ -10,14 +10,15 @@ class CApplication : public gfx::IApplication
 			CApplication();
 			~CApplication();
 
+private:
 			CGame* m_pGame;
-
-		private:
-			float m_FieldOfViewY;
-
 			
 			KeyState m_KeyState;
+
 			gfx::BHandle m_pPlayerMesh;
+			gfx::BHandle m_pEnemyMesh;
+
+			float m_FieldOfViewY;
 
 		private:
 			 bool InternOnStartup();

@@ -27,8 +27,16 @@ void CPlayer::OnUpdate(KeyState* _KeyState)
 void CPlayer::Move(EPlayerMoveState _State)
 {
     float* YPos = &m_Translation[1];
-   // float halfWidth = (fabsf((float)m_PointA[0]) + fabsf((float)m_PointB[0])) / 2;
+    float halfWidth = (fabsf((float)m_PointA[0]) + fabsf((float)m_PointB[0])) / 2;
 
     if (_State == EPlayerMoveState::DOWN)  *YPos -= m_Speed;
     if (_State == EPlayerMoveState::UP) *YPos += m_Speed;
+
+    if (*YPos < -9.0f / 2 + halfWidth){ //bottom
+        *YPos = -9.0f / 2 + halfWidth;
+    }
+   if (*YPos > 9.0f / 2 - halfWidth) { //top
+        *YPos = 9.0f / 2 - halfWidth;
+    }
+
 }
