@@ -29,16 +29,15 @@ void CGame::InitGame()
 	m_pPlayer = new CPlayer();
 
 	float padding = 0.5f;
-	int numberOfEnemies = 1;
-
 
 	for (int i = 0; i < numberOfEnemies; i++)
 	{
+		CreateEnemy();
 		for (CEnemy* e : m_pEnemies)
 		{
 			e->OnUpdate();
 		}
-		m_pEnemies.push_back(new CEnemy((12.0f/2) -padding , (9.0f / 2) - padding));//right top, where is enemy
+		m_pEnemies.push_back(new CEnemy((12.0f / 2) - padding, (9.0f / 2) - padding));//right top, where is enemy
 	}
 }
 
@@ -51,28 +50,32 @@ void CGame::RunGame(KeyState* _KeyState)
 }
 
 void CGame::CreateEnemy() {
-	float padding = 0.5f;
-	m_pEnemies.push_back(new CEnemy((12.0f / 2) - padding, (9.0f / 2) - padding)); //right top
+	int randomNumberX = rand() % 10 + 1; //between -4 and 4, between -5 and 5
+	randomNumberX -= 2;
+	int randomNumberY = rand() % 10 + 1;
+	randomNumberY -= 5;
+
+	m_pEnemies.push_back(new CEnemy(randomNumberX, randomNumberY));
 }
 
 void CGame::EnemyAction() 
 {
-	m_Ticks++;
-	if (m_Ticks == m_MaxTicks)
+	for (CEnemy* e : m_pEnemies)
 	{
-		for (CEnemy* e : m_pEnemies)
-		{
-			e->OnUpdate();
-		}
-			CreateEnemy();
-			m_Speed++;
-			if (m_Speed >= m_MaxSpeedInterval)
-			{
-				m_Speed = 0;
-				
-			}
+		e->OnUpdate();
+		//to detect if object in window
 		
-		m_Ticks = 0;
+	}
 
+	if (changeLevel == true) {
+		SpawnEnemy();
+		numberOfEnemies++;
+	}
+}
+
+void CGame::SpawnEnemy() {
+	for (int i = 0; i < numberOfEnemies; i++)
+	{
+		CreateEnemy();
 	}
 }

@@ -16,6 +16,7 @@ public:
     CEnemy(float _X, float _Y);
     ~CEnemy();
     void OnUpdate();
+    float getPointA_X();
     EMoveState m_MoveState;
 
 private:

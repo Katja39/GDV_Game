@@ -20,14 +20,11 @@ public:
 
 private:
     void CreateEnemy();
-
+    void SpawnEnemy();
     void EnemyAction();
 
-    int m_Speed = 0;
-    int m_MaxSpeedInterval = 10;
-    int m_Ticks = 0;
-    int m_MaxTicks = 80;
-    
+    bool changeLevel=false; //true, wenn es aufgerufen wird
+    int numberOfEnemies = 3;
 
 public:
     EGameState m_State;

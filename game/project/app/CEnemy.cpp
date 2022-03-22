@@ -16,54 +16,14 @@ CEnemy::~CEnemy()
 
 void CEnemy::OnUpdate()
 {
-    float padding = 0.5f;
-    double width = 12.0f; //window width
-    double height = 9.0f; //window height
+    m_Translation[0] -= 0.03f;
+}
 
-    switch (m_MoveState)
-    {
-    case EMoveState::DOWN: 
-        if (m_Translation[1] <= -(height / 2) + padding) //bottom border
-        {
-            m_MoveState = EMoveState::LEFT;
-            Move(m_MoveState);
-            m_MoveState = EMoveState::UP;
-        }
-        else
-        {
-            Move(m_MoveState);
-        }
-        break;
-    case EMoveState::UP:
-        if (m_Translation[1] >= (12.0f/2) - padding) //Right Border
-        {
-            m_MoveState = EMoveState::LEFT;
-            Move(m_MoveState);
-            m_MoveState = EMoveState::DOWN;
-        }
-        else
-        {
-            Move(m_MoveState);
-        }
-        break;
-    default:
-        break;
-    }
+float CEnemy::getPointA_X() //to detect if object in window
+{
+    return m_PointA[0];
 }
 
 void CEnemy::Move(EMoveState _State)
-{
-    switch (_State)//TODO stimmt noch nicht
-    {
-    case EMoveState::LEFT:
-        m_Translation[0] -= 0.5f;
-        break;
-    case EMoveState::UP:
-        m_Translation[1] += 0.5f;
-        break;
-    case EMoveState::DOWN:
-        m_Translation[1] -= 0.5f;
-    default:
-        break;
-    }
+{ 
 }
