@@ -10,17 +10,16 @@ CGame::CGame(gfx::BHandle* _ppPlayerMesh, gfx::BHandle* _ppEnemyMesh)
 	,m_ppPlayerMesh(_ppPlayerMesh)
 	,m_ppEnemyMesh(_ppEnemyMesh)
 {
-	//do {
-	//	std::system("CLS");
-	//	std::cout << "Sammel alle Objekte auf. Wenn ein Gegener die Linie trifft, hast du verloren" << std::endl;
-	//	std::cout << std::endl;
-	//	std::cout << "Move with 'A' and 'D' or with the arrow keys.\n"<< std::endl;
-	//	std::cout << std::endl;
-	//	std::cout << '\n' << "Press the Enter key to continue.";
-	//} while (std::cin.get() != '\n');
+	do {
+		std::system("CLS");
+		std::cout << "Sammel alle Objekte auf. Wenn ein Gegner die Linie trifft, hast du verloren" << std::endl;
+		std::cout << std::endl;
+		std::cout << "Move with 'A' and 'D' or with the arrow keys.\n"<< std::endl;
+		std::cout << std::endl;
+		std::cout << '\n' << "Press the Enter key to continue.";
+	} while (std::cin.get() != '\n');
 	m_State = EGameState::RUN;
 	InitGame();
-
 }
 
 CGame::~CGame()
@@ -36,18 +35,7 @@ CGame::~CGame()
 void CGame::InitGame()
 {
 	m_pPlayer = new CPlayer();
-
-	float padding = 0.5f;
-
-	for (int i = 0; i < numberOfEnemies; i++)
-	{
-		CreateEnemy();
-		for (CEnemy* e : m_pEnemies)
-		{
-			e->OnUpdate();
-		}
-		m_pEnemies.push_back(new CEnemy((12.0f / 2) - padding, (9.0f / 2) - padding));//right top, where is enemy
-	}
+	SpawnEnemy();
 }
 
 void CGame::RunGame(KeyState* _KeyState)
@@ -56,14 +44,27 @@ void CGame::RunGame(KeyState* _KeyState)
 	EnemyAction();
 
 	CollisionControll();
-	//IF Player dead, Gameover
+
+	if (score == level*4) {
+			SpawnNumberOfEnemies++;
+			SpawnEnemy(); //enemy gesamt = 8,13,16,23,31,40
+			level++;
+	}
+}
+
+void CGame::FinalizedGame()
+{
+	do {
+		std::system("CLS");
+		std::cout << "Score:" << score;
+		std::cout << std::endl;
+	} while (std::cin.get() != '\n');
 }
 
 void CGame::CreateEnemy() {
-	int randomNumberX = rand() % 10 + 1; //between -4 and 4, between -5 and 5
-	randomNumberX -= 2;
-	int randomNumberY = rand() % 10 + 1;
-	randomNumberY -= 5;
+	float randomNumberX = rand() % 10 + 7; //between 10 and 7
+	float randomNumberY = rand() % 8 + 4;//between 4 and -4
+	randomNumberY -=4;
 
 	m_pEnemies.push_back(new CEnemy(randomNumberX, randomNumberY));
 }
@@ -74,35 +75,30 @@ void CGame::EnemyAction()
 	{
 		e->OnUpdate();
 	}
-
-	if (changeLevel == true) {
-		SpawnEnemy();
-		numberOfEnemies++;
-	}
 }
 
 void CGame::SpawnEnemy() {
-	for (int i = 0; i < numberOfEnemies; i++)
+	for (int i = 0; i <= SpawnNumberOfEnemies; i++)
 	{
 		CreateEnemy();
 	}
 }
-
-//TODO Collider
-
-
 
 void CGame::CollisionControll()
 {
 	for (CEnemy* e : m_pEnemies)
 	{
 		CPlayer* p = m_pPlayer;
-		
+
 			if (EnemyIsInPlayer(p, e))
 			{
 				m_pEnemies.erase(m_pEnemies.begin() + CVector::getVectorIndex(m_pEnemies, e));
+				score += 1;
 			}
-		
+			if (GameOver(e)) 
+			{
+				m_State = EGameState::GAMEOVER;
+			}
 	}
 }
 
@@ -121,8 +117,20 @@ bool CGame::EnemyIsInPlayer(CPlayer* _player, CEnemy* _enemy)
 	//std::cout << l1x << " " << l1y << " " << r1x << " " << r1y;
 	//std::cout << l2x << " " << l2y << " " << r2x << " " << r2y<<"\n";
 
-	if ((l1x > l2x || r1x > r2x)&& ((l2y>=l1y&&l2y<=r1y)||(r2y>=l1y&&r2y<=r1y))) 
+	if ((l1x >= l2x && r1x <= r2x)&& ((l2y>=l1y&&l2y<=r1y)||(r2y>=l1y&&r2y<=r1y))) 
 		return true;
 
+	return false;
+}
+
+bool CGame::GameOver(CEnemy* _enemy)
+{
+	float l1x = _enemy->CRectangle::m_PointD[0];//-2
+	float l2x = _enemy->CRectangle::m_PointD[0] + _enemy->m_Translation[0];//-5
+
+	if (l2x-l1x>-5.75) {
+		std::cout << l1x<<"\n";
+		//return true;
+	}
 	return false;
 }

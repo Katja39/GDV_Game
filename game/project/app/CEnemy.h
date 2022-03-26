@@ -1,7 +1,6 @@
 #pragma once
 #include "CRectangle.h"
 
-enum class EMoveState { UP, DOWN, LEFT };
 class CEnemy :public CRectangle {
 
 private:
@@ -16,9 +15,4 @@ public:
     CEnemy(float _X, float _Y);
     ~CEnemy();
     void OnUpdate();
-    float getPointA_X();
-    EMoveState m_MoveState;
-
-private:
-    void Move(EMoveState _State);
 };

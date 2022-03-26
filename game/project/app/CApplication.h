@@ -12,7 +12,7 @@ class CApplication : public gfx::IApplication
 
 private:
 			CRectangle* m_Background;
-			CRectangle* m_BottomLine;
+			CRectangle* m_LeftLine;
 
 			CGame* m_pGame;
 			

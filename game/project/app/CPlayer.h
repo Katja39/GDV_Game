@@ -3,7 +3,7 @@
 #include "KeyState.h"
 #include <vector>
 
-enum class EPlayerMoveState{UP,DOWN};
+enum class EPlayerMoveState{UP,DOWN,LEFT,RIGHT};
 
 class CPlayer:public CTriangle {
 
@@ -18,7 +18,6 @@ public:
     CPlayer();
     ~CPlayer();
     void OnUpdate(KeyState* _KeyState);
-    bool PlayerIsAlive;
 private:
     void Move(EPlayerMoveState _State);
 };

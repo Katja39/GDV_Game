@@ -32,15 +32,15 @@ CApplication::CApplication()
 	float BottomLineD[3] = { -LineWidth, HEIGHT/2, 0 };
 	float BottomLineColor[4] = { 1.0f, 1.0f, 0.0f, 1.0f };
 
-	m_BottomLine = new CRectangle(BottomLineA, BottomLineB, BottomLineC, BottomLineD, BottomLineColor);
-	m_BottomLine->m_Translation[0] = -5.75f;
+	m_LeftLine = new CRectangle(BottomLineA, BottomLineB, BottomLineC, BottomLineD, BottomLineColor);
+	m_LeftLine->m_Translation[0] = -5.75f;
 }
 
 CApplication::~CApplication()
 {
 	delete m_pGame;
 	delete m_Background;
-	delete m_BottomLine;
+	delete m_LeftLine;
 }
 
 bool CApplication::InternOnStartup()
@@ -65,7 +65,7 @@ bool CApplication::InternOnCreateMeshes()
 		gfx::CreateMesh(e->getMeshInfo(), &m_pEnemyMesh);
 	}
 
-	gfx::CreateMesh(m_BottomLine->getMeshInfo(), &m_pBottomLineMesh);
+	gfx::CreateMesh(m_LeftLine->getMeshInfo(), &m_pBottomLineMesh);
 	gfx::CreateMesh(m_Background->getMeshInfo(), &m_pBackgroundMesh);
 
 	return true;
@@ -100,6 +100,12 @@ bool CApplication::InternOnKeyEvent(unsigned int _Key, bool _IsKeyDown, bool _Is
 		if (_Key == 'S' || _Key == 40){
 			m_KeyState.isSdown = _IsKeyDown; // 39 is the DOWN Arrow
 		}
+		if (_Key == 'D' || _Key == 39) {
+			m_KeyState.isDdown = _IsKeyDown;
+		}
+		if (_Key == 'A' || _Key == 37) {
+			m_KeyState.isAdown = _IsKeyDown;
+		}
 		
 		return true;
 	
@@ -113,8 +119,17 @@ bool CApplication::InternOnUpdate()
 
 	float ViewMatrix[16];
 
-	m_pGame->RunGame(&m_KeyState); //TODO mehr States angeben
-
+	switch (m_pGame->m_State)
+	{
+	case EGameState::START:
+		break;
+	case EGameState::RUN:
+		m_pGame->RunGame(&m_KeyState);
+		break;
+	case EGameState::GAMEOVER:
+		m_pGame->FinalizedGame();
+		break;
+	}
 
 	Eye[0] = 0.0f; At[0] = 0.0f; Up[0] = 0.0f;
 	Eye[1] = 0.0f; At[1] = 0.0f; Up[1] = 1.0f;
@@ -146,7 +161,7 @@ bool CApplication::InternOnFrame()
         gfx::DrawMesh(m_pEnemyMesh);
     }
 
-	  gfx::GetTranslationMatrix(m_BottomLine->m_Translation[0], m_BottomLine->m_Translation[1], m_BottomLine->m_Translation[2], WorldMatrix);
+	  gfx::GetTranslationMatrix(m_LeftLine->m_Translation[0], m_LeftLine->m_Translation[1], m_LeftLine->m_Translation[2], WorldMatrix);
 	  gfx::SetWorldMatrix(WorldMatrix);
 	  gfx::DrawMesh(m_pBottomLineMesh);
 

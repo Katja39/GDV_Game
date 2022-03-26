@@ -8,7 +8,7 @@
 
 #include "KeyState.h"
 
-enum class EGameState { START, RUN, /*PAUSED,*/ /*GAMEOVER,*/ };
+enum class EGameState {START,RUN,GAMEOVER};
 class CGame {
 public:
     CGame(gfx::BHandle* _ppPlayerMesh, gfx::BHandle* _ppEnemyMesh);
@@ -16,7 +16,7 @@ public:
 
     void InitGame();
     void RunGame(KeyState* _KeyState);
-    //void FinalizedGame();
+    void FinalizedGame();
 
 private:
     void CreateEnemy();
@@ -25,11 +25,12 @@ private:
 
     void CollisionControll();
     bool EnemyIsInPlayer(CPlayer* _player, CEnemy* _enemy);
-    //TODO Collider
+    bool GameOver(CEnemy* _enemy);
 
     bool changeLevel=false; //true, wenn es aufgerufen wird
-    int numberOfEnemies = 3;
+    int SpawnNumberOfEnemies = 4;
     int score = 0;
+    int level = 1;
 
 public:
     EGameState m_State;
