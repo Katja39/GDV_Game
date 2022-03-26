@@ -29,6 +29,7 @@ private:
 
     bool changeLevel=false; //true, wenn es aufgerufen wird
     int numberOfEnemies = 3;
+    int score = 0;
 
 public:
     EGameState m_State;

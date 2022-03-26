@@ -5,7 +5,7 @@ CPlayer::CPlayer()
     :CTriangle((float*)m_PointA, (float*)m_PointB, (float*)m_PointC, (float*)m_Color)
     ,PlayerIsAlive(true)
 {
-    m_Speed = 0.1;
+    m_Speed = 0.18;
     m_Translation[0] = -5.0f;
 }
 

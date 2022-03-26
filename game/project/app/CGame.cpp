@@ -10,8 +10,17 @@ CGame::CGame(gfx::BHandle* _ppPlayerMesh, gfx::BHandle* _ppEnemyMesh)
 	,m_ppPlayerMesh(_ppPlayerMesh)
 	,m_ppEnemyMesh(_ppEnemyMesh)
 {
+	//do {
+	//	std::system("CLS");
+	//	std::cout << "Sammel alle Objekte auf. Wenn ein Gegener die Linie trifft, hast du verloren" << std::endl;
+	//	std::cout << std::endl;
+	//	std::cout << "Move with 'A' and 'D' or with the arrow keys.\n"<< std::endl;
+	//	std::cout << std::endl;
+	//	std::cout << '\n' << "Press the Enter key to continue.";
+	//} while (std::cin.get() != '\n');
 	m_State = EGameState::RUN;
 	InitGame();
+
 }
 
 CGame::~CGame()
@@ -64,8 +73,6 @@ void CGame::EnemyAction()
 	for (CEnemy* e : m_pEnemies)
 	{
 		e->OnUpdate();
-		//to detect if object in window
-		
 	}
 
 	if (changeLevel == true) {
@@ -101,21 +108,21 @@ void CGame::CollisionControll()
 
 bool CGame::EnemyIsInPlayer(CPlayer* _player, CEnemy* _enemy)
 {
-	float l1x = _player->CTriangle::m_PointA[0] + _player->m_Translation[0];//A;x
-	float l1y = _player->CTriangle::m_PointA[1] + _player->m_Translation[1];//A;y
-	float r1x = _player->CTriangle::m_PointC[0] + _player->m_Translation[0];//C;x
-	float r1y = _player->CTriangle::m_PointC[1] + _player->m_Translation[1];//C;y
+	float l1x = _player->CTriangle::m_PointA[0] + _player->m_Translation[0];//Ax
+	float l1y = _player->CTriangle::m_PointA[1] + _player->m_Translation[1];//Ay
+	float r1x = _player->CTriangle::m_PointC[0] + _player->m_Translation[0];//Cx
+	float r1y = _player->CTriangle::m_PointC[1] + _player->m_Translation[1];//Cy
 
-	float l2x = _enemy->CRectangle::m_PointD[0] + _enemy->m_Translation[0];
-	float l2y = _enemy->CRectangle::m_PointD[1] + _enemy->m_Translation[0];
-	float r2x = _enemy->CRectangle::m_PointB[0] + _enemy->m_Translation[0];
-	float r2y = _enemy->CRectangle::m_PointB[1] + _enemy->m_Translation[1];
+	float l2x = _enemy->CRectangle::m_PointD[0] + _enemy->m_Translation[0];//Dx
+	float l2y = _enemy->CRectangle::m_PointD[1] + _enemy->m_Translation[1];//Dy
+	float r2x = _enemy->CRectangle::m_PointB[0] + _enemy->m_Translation[0];//Bx
+	float r2y = _enemy->CRectangle::m_PointB[1] + _enemy->m_Translation[1];//By
 
 	//std::cout << l1x << " " << l1y << " " << r1x << " " << r1y;
 	//std::cout << l2x << " " << l2y << " " << r2x << " " << r2y<<"\n";
-	
-	if (r1x >= r2x || l2x >= r1x)//-5,25 < -0.37; -5
-		return false;
 
-	return true;
+	if ((l1x > l2x || r1x > r2x)&& ((l2y>=l1y&&l2y<=r1y)||(r2y>=l1y&&r2y<=r1y))) 
+		return true;
+
+	return false;
 }
