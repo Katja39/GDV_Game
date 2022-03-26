@@ -12,7 +12,6 @@ class CApplication : public gfx::IApplication
 
 private:
 			CRectangle* m_Background;
-			CRectangle* m_LeftLine;
 
 			CGame* m_pGame;
 			
@@ -20,9 +19,9 @@ private:
 
 			gfx::BHandle m_pPlayerMesh;
 			gfx::BHandle m_pEnemyMesh;
+			gfx::BHandle m_pLeftLineMesh;
 			gfx::BHandle m_pBackgroundMesh;
-			gfx::BHandle m_pBottomLineMesh;
-
+			
 			//gfx::BHandle m_BackgroundTexture;
 
 			float m_FieldOfViewY;

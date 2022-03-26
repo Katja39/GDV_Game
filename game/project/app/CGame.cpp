@@ -5,10 +5,11 @@
 #include <iostream>
 
 
-CGame::CGame(gfx::BHandle* _ppPlayerMesh, gfx::BHandle* _ppEnemyMesh)
+CGame::CGame(gfx::BHandle* _ppPlayerMesh, gfx::BHandle* _ppEnemyMesh,gfx::BHandle* _ppLeftLineMesh)
 	:m_State(EGameState::START)
 	,m_ppPlayerMesh(_ppPlayerMesh)
 	,m_ppEnemyMesh(_ppEnemyMesh)
+	,m_ppLeftLineMesh(_ppLeftLineMesh)
 {
 	do {
 		std::system("CLS");
@@ -30,11 +31,13 @@ CGame::~CGame()
 	{
 		delete e;
 	}
+	delete m_pLeftLine;
 }
 
 void CGame::InitGame()
 {
 	m_pPlayer = new CPlayer();
+	m_pLeftLine = new CLeftLine();
 	SpawnEnemy();
 }
 
@@ -46,9 +49,9 @@ void CGame::RunGame(KeyState* _KeyState)
 	CollisionControll();
 
 	if (score == level*4) {
-			SpawnNumberOfEnemies++;
 			SpawnEnemy(); //enemy gesamt = 8,13,16,23,31,40
 			level++;
+			SpawnNumberOfEnemies+=2;
 	}
 }
 
@@ -89,13 +92,15 @@ void CGame::CollisionControll()
 	for (CEnemy* e : m_pEnemies)
 	{
 		CPlayer* p = m_pPlayer;
+		CLeftLine* l = m_pLeftLine;
 
 			if (EnemyIsInPlayer(p, e))
 			{
 				m_pEnemies.erase(m_pEnemies.begin() + CVector::getVectorIndex(m_pEnemies, e));
 				score += 1;
 			}
-			if (GameOver(e)) 
+
+			if (EnemyIsInLine(e,l))
 			{
 				m_State = EGameState::GAMEOVER;
 			}
@@ -123,14 +128,25 @@ bool CGame::EnemyIsInPlayer(CPlayer* _player, CEnemy* _enemy)
 	return false;
 }
 
-bool CGame::GameOver(CEnemy* _enemy)
-{
-	float l1x = _enemy->CRectangle::m_PointD[0];//-2
-	float l2x = _enemy->CRectangle::m_PointD[0] + _enemy->m_Translation[0];//-5
+bool CGame::EnemyIsInLine(CEnemy* _enemy, CLeftLine* _leftLine) {
+	float l1x = _enemy->CRectangle::m_PointD[0] + _enemy->m_Translation[0];
+	float l1y = _enemy->CRectangle::m_PointD[1] + _enemy->m_Translation[1];
+	float r1x = _enemy->CRectangle::m_PointB[0] + _enemy->m_Translation[0];
+	float r1y = _enemy->CRectangle::m_PointB[1] + _enemy->m_Translation[1];
 
-	if (l2x-l1x>-5.75) {
-		std::cout << l1x<<"\n";
-		//return true;
+	float l2x = _leftLine->CRectangle::m_PointD[0] + _leftLine->m_Translation[0];
+	float l2y = _leftLine->CRectangle::m_PointD[1] + _leftLine->m_Translation[1];
+	float r2x = _leftLine->CRectangle::m_PointB[0] + _leftLine->m_Translation[0];
+	float r2y = _leftLine->CRectangle::m_PointB[1] + _leftLine->m_Translation[1];
+
+	if (l1x == r1x || l1y == r1y || l2x == r2x
+		|| l2y == r2y) {
+		return false;
 	}
-	return false;
+	if (l1x >= r2x || l2x >= r1x)
+		return false;
+	if (r1y >= l2y || r2y >= l1y)
+		return false;
+
+	return true;
 }
