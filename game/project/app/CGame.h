@@ -23,6 +23,10 @@ private:
     void SpawnEnemy();
     void EnemyAction();
 
+    void CollisionControll();
+    bool EnemyIsInPlayer(CPlayer* _player, CEnemy* _enemy);
+    //TODO Collider
+
     bool changeLevel=false; //true, wenn es aufgerufen wird
     int numberOfEnemies = 3;
 

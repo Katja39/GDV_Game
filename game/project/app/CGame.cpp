@@ -46,6 +46,7 @@ void CGame::RunGame(KeyState* _KeyState)
 	m_pPlayer->OnUpdate(_KeyState);
 	EnemyAction();
 
+	CollisionControll();
 	//IF Player dead, Gameover
 }
 
@@ -78,4 +79,43 @@ void CGame::SpawnEnemy() {
 	{
 		CreateEnemy();
 	}
+}
+
+//TODO Collider
+
+
+
+void CGame::CollisionControll()
+{
+	for (CEnemy* e : m_pEnemies)
+	{
+		CPlayer* p = m_pPlayer;
+		
+			if (EnemyIsInPlayer(p, e))
+			{
+				m_pEnemies.erase(m_pEnemies.begin() + CVector::getVectorIndex(m_pEnemies, e));
+			}
+		
+	}
+}
+
+bool CGame::EnemyIsInPlayer(CPlayer* _player, CEnemy* _enemy)
+{
+	float l1x = _player->CTriangle::m_PointA[0] + _player->m_Translation[0];//A;x
+	float l1y = _player->CTriangle::m_PointA[1] + _player->m_Translation[1];//A;y
+	float r1x = _player->CTriangle::m_PointC[0] + _player->m_Translation[0];//C;x
+	float r1y = _player->CTriangle::m_PointC[1] + _player->m_Translation[1];//C;y
+
+	float l2x = _enemy->CRectangle::m_PointD[0] + _enemy->m_Translation[0];
+	float l2y = _enemy->CRectangle::m_PointD[1] + _enemy->m_Translation[0];
+	float r2x = _enemy->CRectangle::m_PointB[0] + _enemy->m_Translation[0];
+	float r2y = _enemy->CRectangle::m_PointB[1] + _enemy->m_Translation[1];
+
+	//std::cout << l1x << " " << l1y << " " << r1x << " " << r1y;
+	//std::cout << l2x << " " << l2y << " " << r2x << " " << r2y<<"\n";
+	
+	if (r1x >= r2x || l2x >= r1x)//-5,25 < -0.37; -5
+		return false;
+
+	return true;
 }
