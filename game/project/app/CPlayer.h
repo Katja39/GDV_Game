@@ -18,6 +18,7 @@ public:
     CPlayer();
     ~CPlayer();
     void OnUpdate(KeyState* _KeyState);
+    void Power(bool _power);
 private:
     void Move(EPlayerMoveState _State);
 };

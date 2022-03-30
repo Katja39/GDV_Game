@@ -21,16 +21,13 @@ private:
 			gfx::BHandle m_pEnemyMesh;
 			gfx::BHandle m_pLeftLineMesh;
 			gfx::BHandle m_pBackgroundMesh;
-			
-			//gfx::BHandle m_BackgroundTexture;
+			gfx::BHandle m_pPowerUpMesh;
 
 			float m_FieldOfViewY;
 
 		private:
 			 bool InternOnStartup();
 			 bool InternOnShutdown();
-			// bool InternOnCreateTextures(); TODO
-			// bool InternOnReleaseTextures();
 			 bool InternOnCreateMeshes();
 			 bool InternOnReleaseMeshes();
 			 bool InternOnResize(int _Width, int _Height);

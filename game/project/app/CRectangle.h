@@ -1,6 +1,4 @@
 #pragma once
-
-#pragma once
 #include "CObjectMesh.h"
 
 class CRectangle : public CObjectMesh
@@ -32,5 +30,4 @@ protected:
     void fillVertices();
     void fillColors();
     void fillIndices();
-
 };

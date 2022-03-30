@@ -8,11 +8,12 @@ CApplication::CApplication()
 	,m_FieldOfViewY(60.0f)
 	,m_pPlayerMesh(nullptr)
 	,m_pEnemyMesh(nullptr)
+	,m_pPowerUpMesh(nullptr)
 	,m_pBackgroundMesh(nullptr)
 	,m_pLeftLineMesh(nullptr)
 {
-	float WIDTH = 12.0f;
-	float HEIGHT = 9.0f;
+	float WIDTH = 11.94f;// /1.005
+	float HEIGHT = 8.955f;
 
 	float BackgroundA[3] = { -WIDTH / 2, -HEIGHT / 2, 0 };
 	float BackgroundB[3] = { WIDTH / 2, -HEIGHT / 2, 0 };
@@ -33,7 +34,7 @@ CApplication::~CApplication()
 
 bool CApplication::InternOnStartup()
 {
-	m_pGame = new CGame(&m_pPlayerMesh, &m_pEnemyMesh,&m_pLeftLineMesh);
+	m_pGame = new CGame(&m_pPlayerMesh, &m_pEnemyMesh,&m_pLeftLineMesh,&m_pPowerUpMesh);
 	float ClearColor[4] = { 0.0f, 0.0f, 0.2f, 0.2f, };
 	gfx::SetClearColor(ClearColor);
 
@@ -52,6 +53,10 @@ bool CApplication::InternOnCreateMeshes()
 	{
 		gfx::CreateMesh(e->getMeshInfo(), &m_pEnemyMesh);
 	}
+	for (CPowerUp* p : m_pGame->m_pPowerUp)
+	{
+		gfx::CreateMesh(p->getMeshInfo(), &m_pPowerUpMesh);
+	}
 
 	gfx::CreateMesh(m_pGame->m_pLeftLine->getMeshInfo(), &m_pLeftLineMesh);
 
@@ -66,6 +71,7 @@ bool CApplication::InternOnReleaseMeshes()
 	gfx::ReleaseMesh(m_pEnemyMesh);
 	gfx::ReleaseMesh(m_pLeftLineMesh);
 	gfx::ReleaseMesh(m_pBackgroundMesh);
+	gfx::ReleaseMesh(m_pPowerUpMesh);
 
 	return true;
 }
@@ -139,7 +145,11 @@ bool CApplication::InternOnFrame()
 	// Set the position of the mesh in the world and draw it.
 	// -----------------------------------------------------------------------------
 	//Player
-	gfx::GetTranslationMatrix(m_pGame->m_pPlayer->m_Translation[0], m_pGame->m_pPlayer->m_Translation[1], m_pGame->m_pPlayer->m_Translation[2], WorldMatrix);
+	float TranslationMatrix[16];
+	float ScaleMatrix[16];
+	gfx::GetTranslationMatrix(m_pGame->m_pPlayer->m_Translation[0], m_pGame->m_pPlayer->m_Translation[1], m_pGame->m_pPlayer->m_Translation[2], TranslationMatrix);
+	gfx::GetScaleMatrix(m_pGame->m_pPlayer->m_Scale[0], m_pGame->m_pPlayer->m_Scale[1], m_pGame->m_pPlayer->m_Scale[2], ScaleMatrix);
+	gfx::MulMatrix(ScaleMatrix,TranslationMatrix, WorldMatrix);
 	gfx::SetWorldMatrix(WorldMatrix);
 	gfx::DrawMesh(m_pPlayerMesh);
 
@@ -154,9 +164,20 @@ bool CApplication::InternOnFrame()
 	 gfx::SetWorldMatrix(WorldMatrix);
 	 gfx::DrawMesh(m_pLeftLineMesh);
 
+	 //Power Up
+	 float RotationMatrix[16];
+	 for (CPowerUp* p : m_pGame->m_pPowerUp) {
+		 gfx::GetTranslationMatrix(p->m_Translation[0], p->m_Translation[1], p->m_Translation[2], TranslationMatrix);
+		 gfx::GetRotationZMatrix(p->m_Rotation[2], RotationMatrix);
+		 gfx::MulMatrix(RotationMatrix, TranslationMatrix,WorldMatrix);
+		 gfx::SetWorldMatrix(WorldMatrix);
+		 gfx::DrawMesh(m_pPowerUpMesh);
+	 }
+
+	 //Background
 	  gfx::GetTranslationMatrix(m_Background->m_Translation[0], m_Background->m_Translation[1], m_Background->m_Translation[2], WorldMatrix);
+	 
 	  gfx::SetWorldMatrix(WorldMatrix);
 	  gfx::DrawMesh(m_pBackgroundMesh);
-
 	return true;
 }

@@ -29,12 +29,25 @@ void CPlayer::OnUpdate(KeyState* _KeyState)
     fillVertices();
 }
 
+void CPlayer::Power(bool _power)
+{
+    if (_power == true) {
+        m_Scale[0] = 3;
+        m_Scale[1] = 3;
+    }
+    else {
+        m_Scale[0] = 1;
+        m_Scale[1] = 1;
+    }
+  
+}
+
 void CPlayer::Move(EPlayerMoveState _State)
 {
     float* XPos = &m_Translation[0];
     float* YPos = &m_Translation[1];
     float halfWidth = (fabsf((float)m_PointA[0]) + fabsf((float)m_PointB[0])) / 2;
-
+      
     if (_State == EPlayerMoveState::DOWN)  *YPos -= m_Speed;
     if (_State == EPlayerMoveState::UP) *YPos += m_Speed;
 
