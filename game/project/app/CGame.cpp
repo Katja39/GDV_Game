@@ -13,9 +13,9 @@ CGame::CGame(gfx::BHandle* _ppPlayerMesh, gfx::BHandle* _ppEnemyMesh,gfx::BHandl
 {
 	do {
 		std::system("CLS");
-		std::cout << "Sammel alle Objekte auf. Wenn ein Gegner die Linie trifft, hast du verloren" << std::endl;
+		std::cout << "Welcome. Collect all the objects. If an enemy reaches the line, you lose." << std::endl;
 		std::cout << std::endl;
-		std::cout << "Move with 'A' and 'D' or with the arrow keys.\n"<< std::endl;
+		std::cout << "Move with WASD or with the arrow keys.\n"<< std::endl;
 		std::cout << std::endl;
 		std::cout << '\n' << "Press the Enter key to continue.";
 	} while (std::cin.get() != '\n');
@@ -48,8 +48,8 @@ void CGame::RunGame(KeyState* _KeyState)
 
 	CollisionControll();
 
-	if (score == level*4) {
-			SpawnEnemy(); //enemy gesamt = 8,13,16,23,31,40
+	if (score >= level*4) {
+			SpawnEnemy(); //enemy gesamt = 5,10,16,23,31,40
 			level++;
 			SpawnNumberOfEnemies+=2;
 	}
@@ -57,17 +57,17 @@ void CGame::RunGame(KeyState* _KeyState)
 
 void CGame::FinalizedGame()
 {
+	CGame::~CGame();
 	do {
 		std::system("CLS");
-		std::cout << "Score:" << score;
-		std::cout << std::endl;
+		std::cout << "Congratulations!\nScore:" << score;
 	} while (std::cin.get() != '\n');
 }
 
 void CGame::CreateEnemy() {
 	float randomNumberX = rand() % 10 + 7; //between 10 and 7
-	float randomNumberY = rand() % 8 + 4;//between 4 and -4
-	randomNumberY -=4;
+	float randomNumberY = rand() % 8 + 0;//between 4 and -4
+	randomNumberY -= 4;
 
 	m_pEnemies.push_back(new CEnemy(randomNumberX, randomNumberY));
 }

@@ -15,5 +15,5 @@ CEnemy::~CEnemy()
 
 void CEnemy::OnUpdate()
 {
-    m_Translation[0] -= 0.025f;
+    m_Translation[0] -= 0.02f;
 }
