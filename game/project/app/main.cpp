@@ -8,6 +8,5 @@ int main() {
 	
 	RunApplication(800, 600, "GDV Projekt", &Application);
 
-	//TODO
 	return 0;
 }

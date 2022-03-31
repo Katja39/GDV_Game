@@ -20,8 +20,8 @@ CApplication::CApplication()
 	float BackgroundC[3] = { WIDTH / 2,  HEIGHT / 2, 0 };
 	float BackgroundD[3] = { -WIDTH / 2,  HEIGHT / 2, 0 };
 
-	int color = 0.1;
-	float BackgroundColor[4] = { color,color,color, 1.0f };
+	float color = 0.02f;
+	float BackgroundColor[4] = { color,color,color, color };//darkgrey
 
 	m_Background = new CRectangle(BackgroundA, BackgroundB, BackgroundC, BackgroundD, BackgroundColor);
 }
@@ -90,15 +90,15 @@ bool CApplication::InternOnResize(int _Width, int _Height)
 bool CApplication::InternOnKeyEvent(unsigned int _Key, bool _IsKeyDown, bool _IsAltDown)
 {
 		if (_Key == 'W' || _Key == 38){
-			m_KeyState.isWdown = _IsKeyDown; // 38 is the UP Arrow
+			m_KeyState.isWdown = _IsKeyDown; // 38 = up arrow
 		}
-		if (_Key == 'S' || _Key == 40){
-			m_KeyState.isSdown = _IsKeyDown; // 39 is the DOWN Arrow
+		if (_Key == 'S' || _Key == 40){      //40 = down arrow
+			m_KeyState.isSdown = _IsKeyDown; 
 		}
-		if (_Key == 'D' || _Key == 39) {
+		if (_Key == 'D' || _Key == 39) {    // 39 = right arrow
 			m_KeyState.isDdown = _IsKeyDown;
 		}
-		if (_Key == 'A' || _Key == 37) {
+		if (_Key == 'A' || _Key == 37) {    //37 = left arrow
 			m_KeyState.isAdown = _IsKeyDown;
 		}
 		
@@ -140,11 +140,11 @@ bool CApplication::InternOnUpdate()
 bool CApplication::InternOnFrame()
 {
 	float WorldMatrix[16];
-
-	// -----------------------------------------------------------------------------
-	// Set the position of the mesh in the world and draw it.
-	// -----------------------------------------------------------------------------
+	
+	// 
 	//Player
+	//
+
 	float TranslationMatrix[16];
 	float ScaleMatrix[16];
 	gfx::GetTranslationMatrix(m_pGame->m_pPlayer->m_Translation[0], m_pGame->m_pPlayer->m_Translation[1], m_pGame->m_pPlayer->m_Translation[2], TranslationMatrix);
@@ -153,18 +153,27 @@ bool CApplication::InternOnFrame()
 	gfx::SetWorldMatrix(WorldMatrix);
 	gfx::DrawMesh(m_pPlayerMesh);
 
+	//
 	//Enemy
+	//
+
 	 for (CEnemy* e : m_pGame->m_pEnemies) {
         gfx::GetTranslationMatrix(e->m_Translation[0], e->m_Translation[1], e->m_Translation[2], WorldMatrix);
         gfx::SetWorldMatrix(WorldMatrix);
         gfx::DrawMesh(m_pEnemyMesh);
     }
+	 //
 	 //LeftLine
+	 //
+
 	 gfx::GetTranslationMatrix(m_pGame->m_pLeftLine->m_Translation[0], m_pGame->m_pLeftLine->m_Translation[1], m_pGame->m_pLeftLine->m_Translation[2], WorldMatrix);
 	 gfx::SetWorldMatrix(WorldMatrix);
 	 gfx::DrawMesh(m_pLeftLineMesh);
-
+	 
+	 //
 	 //Power Up
+	 //
+
 	 float RotationMatrix[16];
 	 for (CPowerUp* p : m_pGame->m_pPowerUp) {
 		 gfx::GetTranslationMatrix(p->m_Translation[0], p->m_Translation[1], p->m_Translation[2], TranslationMatrix);
@@ -173,10 +182,11 @@ bool CApplication::InternOnFrame()
 		 gfx::SetWorldMatrix(WorldMatrix);
 		 gfx::DrawMesh(m_pPowerUpMesh);
 	 }
-
+	 //
 	 //Background
+	 //
+
 	  gfx::GetTranslationMatrix(m_Background->m_Translation[0], m_Background->m_Translation[1], m_Background->m_Translation[2], WorldMatrix);
-	 
 	  gfx::SetWorldMatrix(WorldMatrix);
 	  gfx::DrawMesh(m_pBackgroundMesh);
 	return true;

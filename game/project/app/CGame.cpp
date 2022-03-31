@@ -58,42 +58,44 @@ void CGame::RunGame(KeyState* _KeyState)
 	CollisionControllEnemy();
 	CollisionControllPowerUp();
 
-	//Level
+	//Level 1-3
 	if (score >= round*3&&score<30) {
-			SpawnEnemy(); //enemy gesamt = 3,7,12,17,23,30,38,47,57,68,80
+			SpawnEnemy();
 			round++;
-			SpawnNumberOfEnemies++;
+			spawnNumberOfEnemies++;
 			if(power==false){
 			SpawnPowerUp();
 			}
 	}
 	if (score == 50) {
-		SpawnNumberOfEnemies = 3;
+		spawnNumberOfEnemies = 3;
 		enemySpeed = 0.03;
-		level++;
+		level=2;
 	}
-	if (score>60&&score >= round * 5 && score < 90) {
+	if (score>70&&score >= round * 5 && score < 100) {
 		SpawnEnemy();
 		round++;
-		SpawnNumberOfEnemies++;
+		spawnNumberOfEnemies++;
 		if (power == false) {
 			SpawnPowerUp();
 		}
 	}
-	if (score == 120) {
-		SpawnNumberOfEnemies = 4;
+	if (score == 130) {
+		spawnNumberOfEnemies = 4;
 		enemySpeed = 0.05;
-		level++;
+		level=3;
 	}
-	if (score > 100 && score >= round * 4 && score < 150) {
+	if (score > 180 && score >= round * 4 && score < 210) {
 		SpawnEnemy();
 		round++;
-		SpawnNumberOfEnemies++;
+		spawnNumberOfEnemies++;
 		if (power == false) {
 			SpawnPowerUp();
 		}
 	}
-
+	if (score > 250) {
+		m_State = EGameState::GAMEOVER;
+	}
 
 }
 
@@ -105,6 +107,10 @@ void CGame::FinalizedGame()
 		std::cout << "\nLevel:" << level;
 	} while (std::cin.get() != '\n');
 }
+
+//
+//PowerUp and Enemy
+//
 
 void CGame::CreateEnemy() {
 	float randomNumberX = rand() % 10 + 7; //between 10 and 7
@@ -137,7 +143,7 @@ void CGame::PowerUpAction()
 }
 
 void CGame::SpawnEnemy() {
-	for (int i = 0; i <= SpawnNumberOfEnemies; i++)
+	for (int i = 0; i <= spawnNumberOfEnemies; i++)
 	{
 		ChangeEnemySpeed();
 		CreateEnemy();
@@ -147,6 +153,10 @@ void CGame::SpawnEnemy() {
 void CGame::SpawnPowerUp() {
 	CreatePowerUp();
 }
+
+//
+//Collision Controlls
+//
 
 void CGame::CollisionControllEnemy()
 {
@@ -200,6 +210,10 @@ void CGame::ChangeEnemySpeed()
 	}
 }
 
+//
+//Collider
+//
+
 bool CGame::EnemyIsInPlayer(CPlayer* _player, CEnemy* _enemy)
 {
 	float l1x;
@@ -209,26 +223,21 @@ bool CGame::EnemyIsInPlayer(CPlayer* _player, CEnemy* _enemy)
 
 	if (power == true) {
 		 l1x = (_player->CTriangle::m_PointA[0] + _player->m_Translation[0]);//Ax
-		 l1y = (_player->CTriangle::m_PointA[1] + _player->m_Translation[1])-0.5;//Ay, unten -0.25, *3 = -1.125
+		 l1y = (_player->CTriangle::m_PointA[1] + _player->m_Translation[1])-0.5;//Ay, -0.25
 		 r1x = _player->CTriangle::m_PointC[0] + _player->m_Translation[0];//Cx 
-		 r1y = (_player->CTriangle::m_PointC[1] + _player->m_Translation[1])+0.5; //Cy 0.5       = 1.875
+		 r1y = (_player->CTriangle::m_PointC[1] + _player->m_Translation[1])+0.5; //Cy, 0.5
 	}
 	else {
 		 l1x = (_player->CTriangle::m_PointA[0] + _player->m_Translation[0]);//Ax
-		 l1y = (_player->CTriangle::m_PointA[1] + _player->m_Translation[1]);//Ay, unten -0.25, *3 = -1.125
+		 l1y = (_player->CTriangle::m_PointA[1] + _player->m_Translation[1]);//Ay,-0.25
 		 r1x = _player->CTriangle::m_PointC[0] + _player->m_Translation[0];//Cx 
-		 r1y = (_player->CTriangle::m_PointC[1] + _player->m_Translation[1]); //Cy 0.5       = 1.875
+		 r1y = (_player->CTriangle::m_PointC[1] + _player->m_Translation[1]); //Cy,0.5
 	}
-		
-	//std::cout <<"!!!lix:" << l1x << " liy: " << l1y << " r1x: " << r1x << " r1y: " << r1y<<"\n";
 
 	float l2x = _enemy->CRectangle::m_PointD[0] + _enemy->m_Translation[0];//Dx
 	float l2y = _enemy->CRectangle::m_PointD[1] + _enemy->m_Translation[1];//Dy
 	float r2x = _enemy->CRectangle::m_PointB[0] + _enemy->m_Translation[0];//Bx
 	float r2y = _enemy->CRectangle::m_PointB[1] + _enemy->m_Translation[1];//By
-
-	//std::cout << l1x << " " << l1y << " " << r1x << " " << r1y;
-	//std::cout << l2x << " " << l2y << " " << r2x << " " << r2y<<"\n";
 
 	if ((l1x >= l2x && r1x <= r2x)&& ((l2y>=l1y&&l2y<=r1y)||(r2y>=l1y&&r2y<=r1y))) 
 		return true;

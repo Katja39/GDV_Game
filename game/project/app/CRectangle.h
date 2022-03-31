@@ -26,6 +26,7 @@ public:
     CRectangle(float _PointA[3], float _PointB[3], float _PointC[3], float _PointD[3], float _Color[4]);
     ~CRectangle();
     gfx::SMeshInfo getMeshInfo() override;
+
 protected:
     void fillVertices();
     void fillColors();
