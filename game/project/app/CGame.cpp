@@ -67,31 +67,33 @@ void CGame::RunGame(KeyState* _KeyState)
 			SpawnPowerUp();
 			}
 	}
-	if (score == 50) {
+	if (score >= 50&&score<=100) {
 		spawnNumberOfEnemies = 3;
 		enemySpeed = 0.03;
 		level=2;
 	}
-	if (score>70&&score >= round * 5 && score < 100) {
+	if (score>70&&score >= round * 4 && score < 100) {
 		SpawnEnemy();
 		round++;
 		spawnNumberOfEnemies++;
 		if (power == false) {
 			SpawnPowerUp();
 		}
+		std::cout << score<<"\n";
 	}
-	if (score == 130) {
+	if (score >= 100&&score<=150) {
 		spawnNumberOfEnemies = 4;
 		enemySpeed = 0.05;
 		level=3;
 	}
-	if (score > 180 && score >= round * 4 && score < 210) {
+	if (score > 130 && score >= round * 4 && score < 190) {
 		SpawnEnemy();
 		round++;
 		spawnNumberOfEnemies++;
 		if (power == false) {
 			SpawnPowerUp();
 		}
+		std::cout << score<<"\n";
 	}
 	if (score > 250) {
 		m_State = EGameState::GAMEOVER;
@@ -105,6 +107,9 @@ void CGame::FinalizedGame()
 		std::system("CLS");
 		std::cout << "Congratulations!\nScore:" << score;
 		std::cout << "\nLevel:" << level;
+		if (score > 250) {
+			std::cout << "\nYou have won!" << level;
+		}
 	} while (std::cin.get() != '\n');
 }
 
